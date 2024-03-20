@@ -57,3 +57,6 @@ class FileStorage:
             par = obj.__class__.__name__ + '.' + obj.id
             if par in self.__objects:
                 del self.__objects[par]
+    def close(self):
+        """get reload function"""
+        self.reload()
