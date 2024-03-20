@@ -1,7 +1,13 @@
 #!/usr/bin/python3
 """This module defines a class to manage file storage for hbnb clone"""
 import json
-
+from models.base_model import BaseModel
+from models.user import User
+from models.state import State
+from models.city import City
+from models.amenity import Amenity
+from models.review import Review
+from models.place import Place
 
 class FileStorage:
     """This class manages storage of hbnb models in JSON format"""
@@ -16,7 +22,8 @@ class FileStorage:
                 if cls == value.__class__ or cls == value.__class__.__name__:
                     solo_obj[key] = value
             return solo_obj
-        return self.__objects
+        else:
+            return self.__objects
 
     def new(self, obj):
         """Adds new object to storage dictionary"""
