@@ -40,7 +40,7 @@ class DBStorage:
                 cls = eval(cls)
             query = self.__session.query(cls)
             for e in query:
-                key = "{}.{}".format(type(e).__name__, elem.id)
+                key = "{}.{}".format(type(e).__name__, e.id)
                 dictiory[key] = e
         else:
             lista = [State, City, User, Place, Review, Amenity]
