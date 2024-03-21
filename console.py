@@ -5,7 +5,7 @@ import sys
 import cmd
 from models.base_model import BaseModel
 from models.__init__ import storage
-from modefrom models.city import City
+from models.city import City
 from models.place import Place
 from models.state import State
 from models.user import User
@@ -131,6 +131,7 @@ class HBNBCommand(cmd.Cmd):
         c_id = new[2]
 
         if c_id and ' ' in c_id:
+            c_id = c_id.partition(' ')[0]
 
         if not c_name:
             print("** class name missing **")
