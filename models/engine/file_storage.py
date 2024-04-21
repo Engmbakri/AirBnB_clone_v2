@@ -1,6 +1,7 @@
 #!/usr/bin/python3
 """This is the file storage class for AirBnB"""
 import json
+import sys
 from models.base_model import BaseModel
 from models.user import User
 from models.state import State
@@ -8,11 +9,12 @@ from models.city import City
 from models.amenity import Amenity
 from models.place import Place
 from models.review import Review
-import shlex
 
 
 class FileStorage:
-    """ s class seriali and
+    """This class serializes instances to a JSON file and
+    deserializes JSON file to instances
+    Attributes:
         __file_path: path to the JSON file
         __objects: objects will be stored
     """
@@ -20,21 +22,29 @@ class FileStorage:
     __objects = {}
 
     def all(self, cls=None):
-        """ Returns a dictionary of __object"""
-        mdic = {}
-        if cls:
-            dictionary = self.__objects
-            for k in dictionary:
-                partition = k.replace('.', ' ')
-                partition = shlex.split(partition)
-                if (partition[0] == cls.__name__):
-                    mdic[k] = self.__objects[k]
-            return (mdic)
-        else:
+        """returns a dictionary
+        Return:
+            returns a dictionary of __object
+        """
+        if cls is None:
             return self.__objects
+        else:
+            new_dict = {}
+            if len(self.__objects) > 0:
+                for key, value in self.__objects.items():
+                    if type(cls) is str:
+                        if cls == key.split('.')[0]:
+                            new_dict[key] = value
+                    else:
+                        if cls is type(value):
+                            new_dict[key] = value
+            return new_dict
 
     def new(self, obj):
-        """ object to known """
+        """sets __object to given obj
+        Args:
+            obj: given object
+        """
         if obj:
             key = "{}.{}".format(type(obj).__name__, obj.id)
             self.__objects[key] = obj
@@ -42,14 +52,15 @@ class FileStorage:
     def save(self):
         """serialize the file path to JSON file path
         """
-        dic = {}
-        for k, v in self.__objects.items():
-            dic[k] = v.to_dict()
+        my_dict = {}
+        for key, value in self.__objects.items():
+            my_dict[key] = value.to_dict()
         with open(self.__file_path, 'w', encoding="UTF-8") as f:
-            json.dump(dic, f)
+            json.dump(my_dict, f)
 
     def reload(self):
-        """Path JSON """
+        """serialize the file path to JSON file path
+        """
         try:
             with open(self.__file_path, 'r', encoding="UTF-8") as f:
                 for key, value in (json.load(f)).items():
@@ -59,11 +70,17 @@ class FileStorage:
             pass
 
     def delete(self, obj=None):
-        """ element vanion"""
-        if obj:
-            key = "{}.{}".format(type(obj).__name__, obj.id)
-            del self.__objects[key]
+        """Deletes obj from __objecs if its inside
+        Not sure if it should also delete from json file
+        """
+
+        dict_key = ""
+        for key, value in self.__objects.items():
+            if obj == value:
+                dict_key = key
+        if dict_key is not "":
+            del self.__objects[dict_key]
 
     def close(self):
-        """ Function reload("""
+        """ calls reload() for deserializing the JSON file to objects."""
         self.reload()
