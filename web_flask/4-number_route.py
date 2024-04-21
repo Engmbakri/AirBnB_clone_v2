@@ -22,7 +22,7 @@ def c_text(text):
     text = text.replace('_', ' ')
     return 'C {}'.format(text)
 
-@app.route('/python/(<text>')
+@app.route('/python/<text>')
 def python_text(text):
     "takes text as a parameter and return it"
     text = text.replace('_', ' ')
@@ -36,4 +36,3 @@ def integer_num(n):
 
 if __name__ == '__main__':
     app.run(host='0.0.0.0', port=5000)
-
